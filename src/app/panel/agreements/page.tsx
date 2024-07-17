@@ -1,6 +1,6 @@
-import UsersPage from "@/components/pages/panel/users/users-page";
+import AgreementsPage from "@/components/pages/panel/agreements/agreements-page";
 
 
-export default function Users(){
-    return <UsersPage />
+export default function Agreements(){
+    return <AgreementsPage />
 }

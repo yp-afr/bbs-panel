@@ -1,9 +1,9 @@
 import {useQuery} from "@tanstack/react-query";
-import {FilesService} from "@/services/files.service";
+import {AgreementsService} from "@/services/agreements.service";
 
 
-export const useFiles = () => {
-    const {isLoading, data} = useQuery({queryKey: ["get files"], queryFn: FilesService.getAll});
+export const useAgreements = () => {
+    const {isLoading, data} = useQuery({queryKey: ["get agreements"], queryFn: AgreementsService.getAll});
 
     return {isLoading, data}
 }

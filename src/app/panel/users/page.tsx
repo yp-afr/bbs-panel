@@ -1,5 +1,6 @@
-import LogsPage from "@/components/pages/panel/logs/logs-page";
+import UsersPage from "@/components/pages/panel/users/users-page";
 
-export default function Dashboard(){
-    return <LogsPage />
+
+export default function Users(){
+    return <UsersPage />
 }

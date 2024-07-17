@@ -12,6 +12,9 @@ async function fetchClient({ method = "GET", url, body = "", token }: fetchClien
         const session = await getSession();
         const accessToken = token || session?.accessToken;
 
+
+
+
         const response = await fetch(url.toString(), {
             method: method,
             headers: {
@@ -26,15 +29,14 @@ async function fetchClient({ method = "GET", url, body = "", token }: fetchClien
             throw response;
         }
 
+
+
+
         return response;
     } catch (error) {
         if (error instanceof Response) {
             if (error.status === 401) {
                 signOut();
-            }
-
-            if (error.status === 409) {
-                window.location.href = "/request-email-verification";
             }
 
             throw error;

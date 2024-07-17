@@ -1,37 +1,46 @@
+"use client"
+
 import {Dialog, Menu, Transition} from "@headlessui/react";
-import {Fragment, useState} from "react";
+import {Fragment, useEffect, useState} from "react";
 import {
-    BellIcon,
-    CalendarIcon, ChartBarIcon,
+    BellIcon, BuildingOfficeIcon,
+    CalendarIcon, ChartBarIcon, DocumentDuplicateIcon,
     FolderIcon,
     HomeIcon, InboxIcon,
-    MagnifyingGlassIcon,
+    MagnifyingGlassIcon, PaperClipIcon, TableCellsIcon,
     UsersIcon,
     XMarkIcon
 } from "@heroicons/react/24/outline";
+import {signOut, useSession} from "next-auth/react";
+import UserButton from "@/components/layouts/user-button";
+import {usePathname} from "next/navigation";
+import {BreadcrumbItem, Breadcrumbs} from "@nextui-org/breadcrumbs";
+import {navigation} from "@/config/navigation";
+import {BreadcrumbsBlock} from "@/components/layouts/breadcrumbs";
 
 
-const navigation = [
-    {name: 'Dashboard', href: '#', icon: HomeIcon, current: true},
-    {name: 'Team', href: '#', icon: UsersIcon, current: false},
-    {name: 'Projects', href: '#', icon: FolderIcon, current: false},
-    {name: 'Calendar', href: '#', icon: CalendarIcon, current: false},
-    {name: 'Documents', href: '#', icon: InboxIcon, current: false},
-    {name: 'Reports', href: '#', icon: ChartBarIcon, current: false},
-]
 const userNavigation = [
     {name: 'Your Profile', href: '#'},
     {name: 'Settings', href: '#'},
-    {name: 'Sign out', href: '#'},
+    {name: 'Вихід', href: '#', onClick: () => signOut()},
 ]
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
 
-export const DashboardLayout = (children: React.ReactNode) => {
-
+export const PanelLayoutComponent = ({children}: {children: React.ReactNode}) => {
+    const session = useSession()
     const [sidebarOpen, setSidebarOpen] = useState(false)
+
+    const pathname = usePathname();
+
+    const currentRoute = navigation.sections.flatMap(section => section.links).find(link => link.href == pathname)
+
+    // breadcrubs with section and link
+
+
+
 
     return <div>
         <Transition.Root show={sidebarOpen} as={Fragment}>
@@ -80,32 +89,35 @@ export const DashboardLayout = (children: React.ReactNode) => {
                         <div className="flex-shrink-0 flex items-center px-4">
                             <img
                                 className="h-8 w-auto"
-                                src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
+                                src="https://i0.wp.com/bbs.ua/wp-content/uploads/2023/11/white-bbs-insurance.png?fit=640%2C234&ssl=1"
                                 alt="Workflow"
                             />
                         </div>
                         <div className="mt-5 flex-1 h-0 overflow-y-auto">
                             <nav className="px-2 space-y-1">
-                                {navigation.map((item) => (
-                                    <a
-                                        key={item.name}
-                                        href={item.href}
-                                        className={classNames(
-                                            item.current
-                                                ? 'bg-gray-100 text-gray-900'
-                                                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-                                            'group flex items-center px-2 py-2 text-base font-medium rounded-md'
-                                        )}
-                                    >
-                                        <item.icon
-                                            className={classNames(
-                                                item.current ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500',
-                                                'mr-4 flex-shrink-0 h-6 w-6'
-                                            )}
-                                            aria-hidden="true"
-                                        />
-                                        {item.name}
-                                    </a>
+                                {navigation.sections.map((section) => (
+                                    <div key={section.title}>
+                                        <p className="text-gray-600 text-sm font-semibold px-2">{section.title}</p>
+                                        {section.links.map((item) => (
+                                            <a
+                                                key={item.title}
+                                                href={item.href}
+                                                className={classNames(
+                                                    item.href == pathname ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                                                    'group flex items-center px-2 py-2 text-sm font-medium rounded-md'
+                                                )}
+                                            >
+                                                <item.icon
+                                                    className={classNames(
+                                                        item.href == pathname ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500',
+                                                        'mr-3 flex-shrink-0 h-6 w-6'
+                                                    )}
+                                                    aria-hidden="true"
+                                                />
+                                                {item.title}
+                                            </a>
+                                        ))}
+                                    </div>
                                 ))}
                             </nav>
                         </div>
@@ -124,31 +136,58 @@ export const DashboardLayout = (children: React.ReactNode) => {
                 <div className="flex items-center flex-shrink-0 px-4">
                     <img
                         className="h-8 w-auto"
-                        src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
+                        src="https://i0.wp.com/bbs.ua/wp-content/uploads/2023/11/white-bbs-insurance.png?fit=640%2C234&ssl=1"
                         alt="Workflow"
                     />
                 </div>
                 <div className="mt-5 flex-grow flex flex-col">
                     <nav className="flex-1 px-2 pb-4 space-y-1">
-                        {navigation.map((item) => (
+
                             <a
-                                key={item.name}
-                                href={item.href}
+                                key={navigation.home.title}
+                                href={navigation.home.href}
                                 className={classNames(
-                                    item.current ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                                    navigation.home.href == pathname ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                                     'group flex items-center px-2 py-2 text-sm font-medium rounded-md'
                                 )}
                             >
-                                <item.icon
+                                <navigation.home.icon
                                     className={classNames(
-                                        item.current ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500',
+                                        navigation.home.href == pathname ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500',
                                         'mr-3 flex-shrink-0 h-6 w-6'
                                     )}
                                     aria-hidden="true"
                                 />
-                                {item.name}
+                                {navigation.home.title}
                             </a>
+
+
+                        {navigation.sections.map((section) => (
+                            <div key={section.title}>
+                                <p className="text-gray-500 text-sm  px-2 py-3">{section.title}</p>
+                                {section.links.map((item) => (
+                                    <a
+                                        key={item.title}
+                                        href={item.href}
+                                        className={classNames(
+                                            item.href == pathname ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                                            'group flex items-center px-2 py-2 text-sm font-medium rounded-md'
+                                        )}
+                                    >
+                                        <item.icon
+                                            className={classNames(
+                                                item.href == pathname ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500',
+                                                'mr-3 flex-shrink-0 h-6 w-6'
+                                            )}
+                                            aria-hidden="true"
+                                        />
+                                        {item.title}
+                                    </a>
+                                ))}
+                            </div>
                         ))}
+
+
                     </nav>
                 </div>
             </div>
@@ -157,36 +196,20 @@ export const DashboardLayout = (children: React.ReactNode) => {
             <div className="sticky top-0 z-10 flex-shrink-0 flex h-16 bg-white shadow">
                 <button
                     type="button"
-                    className="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
+                    className="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-red-500 md:hidden"
                     onClick={() => setSidebarOpen(true)}
                 >
                     <span className="sr-only">Open sidebar</span>
                     <FolderIcon className="h-6 w-6" aria-hidden="true"/>
                 </button>
                 <div className="flex-1 px-4 flex justify-between">
-                    <div className="flex-1 flex">
-                        <form className="w-full flex md:ml-0" action="#" method="GET">
-                            <label htmlFor="search-field" className="sr-only">
-                                Search
-                            </label>
-                            <div className="relative w-full text-gray-400 focus-within:text-gray-600">
-                                <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none">
-                                    <MagnifyingGlassIcon className="h-5 w-5" aria-hidden="true"/>
-                                </div>
-                                <input
-                                    id="search-field"
-                                    className="block w-full h-full pl-8 pr-3 py-2 border-transparent text-gray-900 placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-0 focus:border-transparent sm:text-sm"
-                                    placeholder="Search"
-                                    type="search"
-                                    name="search"
-                                />
-                            </div>
-                        </form>
+                    <div className="flex-1 flex items-center">
+                        <BreadcrumbsBlock />
                     </div>
                     <div className="ml-4 flex items-center md:ml-6">
                         <button
                             type="button"
-                            className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                         >
                             <span className="sr-only">View notifications</span>
                             <BellIcon className="h-6 w-6" aria-hidden="true"/>
@@ -196,13 +219,14 @@ export const DashboardLayout = (children: React.ReactNode) => {
                         <Menu as="div" className="ml-3 relative">
                             <div>
                                 <Menu.Button
-                                    className="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    <span className="sr-only">Open user menu</span>
-                                    <img
-                                        className="h-8 w-8 rounded-full"
-                                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                        alt=""
-                                    />
+                                    className="max-w-xs bg-white flex items-center text-sm rounded-full select-none outline-none">
+
+                                    <UserButton name={session.data?.user?.name} phone={session.data?.user?.phone} />
+                                    {/*<img*/}
+                                    {/*    className="h-8 w-8 rounded-full"*/}
+                                    {/*    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"*/}
+                                    {/*    alt=""*/}
+                                    {/*/>*/}
                                 </Menu.Button>
                             </div>
                             <Transition
@@ -220,6 +244,7 @@ export const DashboardLayout = (children: React.ReactNode) => {
                                         <Menu.Item key={item.name}>
                                             {({active}) => (
                                                 <a
+                                                    onClick={item.onClick}
                                                     href={item.href}
                                                     className={classNames(
                                                         active ? 'bg-gray-100' : '',
@@ -232,6 +257,7 @@ export const DashboardLayout = (children: React.ReactNode) => {
                                         </Menu.Item>
                                     ))}
                                 </Menu.Items>
+
                             </Transition>
                         </Menu>
                     </div>
@@ -240,12 +266,12 @@ export const DashboardLayout = (children: React.ReactNode) => {
 
             <main className="flex-1">
                 <div className="py-6">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-                        <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
-                    </div>
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+                    <div className="mx-auto px-4 sm:px-6 md:px-8">
+
                         {/* Replace with your content */}
                         <div className="py-4">
+
+
                             {children}
                         </div>
                         {/* /End replace */}

@@ -2,7 +2,6 @@
 
 import {memo} from "react";
 import {useAgreementById} from "@/hooks/useAgreementById";
-import {Tab, Tabs} from "@nextui-org/tabs";
 import {InformationCircleIcon, PaperClipIcon, UserIcon} from "@heroicons/react/24/outline";
 import {Card, CardBody, CardHeader} from "@nextui-org/card";
 

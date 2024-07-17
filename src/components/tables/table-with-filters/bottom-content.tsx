@@ -4,9 +4,9 @@ import {Button} from "@nextui-org/button";
 import {Selection} from "@nextui-org/react";
 import {UserType} from "@/types/user.type";
 
-type BottomContentProps = {
+type BottomContentProps<T> = {
     selectedKeys: Selection;
-    filteredItems: UserType[];
+    filteredItems: T[];
     page: number;
     pages: number;
     setPage: (page: number) => void;
@@ -15,7 +15,7 @@ type BottomContentProps = {
 
 }
 
-const BottomContent = ({selectedKeys,filteredItems,page,pages,setPage,onPreviousPage,onNextPage }: BottomContentProps) => {
+const BottomContent = <T,>({selectedKeys,filteredItems,page,pages,setPage,onPreviousPage,onNextPage }: BottomContentProps<T>) => {
     return (
         <div className="py-2 px-2 flex justify-between items-center">
         <span className="w-[30%] text-small text-default-400">

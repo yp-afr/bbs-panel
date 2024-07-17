@@ -1,17 +1,15 @@
 "use client"
 
 import {useStats} from "@/hooks/useStats";
+import Stats from "@/components/pages/panel/dashboard/stats";
+import StatsSkeleton from "@/components/pages/panel/dashboard/stats-skeleton";
 
 export const DashboardPage = () => {
     const {isLoading, data} = useStats();
 
-    return <div>
-        {isLoading && <div>Loading...</div>}
-        <div>
-            {data && <div>
-                <div>Users: {data.users_count}</div>
-                <div>Agreements: {data.agreements_count}</div>
-            </div>}
-        </div>
-    </div>
+    if(isLoading){
+        return <StatsSkeleton />
+    }
+
+    return <Stats stats={data} />
 }
