@@ -1,5 +1,4 @@
 import {getSession, signOut} from "next-auth/react";
-import {redirect} from "next/navigation";
 
 interface fetchClientProps {
     method?: string;
