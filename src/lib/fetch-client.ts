@@ -33,7 +33,9 @@ async function fetchClient({ method = "GET", url, body = "", token }: fetchClien
     } catch (error) {
         if (error instanceof Response) {
             if (error.status === 401) {
-                await signOut();
+                await signOut({
+                    callbackUrl: "/login",
+                });
             }
 
             throw error;
