@@ -1,4 +1,5 @@
-import { getSession, signOut } from "next-auth/react";
+import {getSession, signOut} from "next-auth/react";
+import {redirect} from "next/navigation";
 
 interface fetchClientProps {
     method?: string;
@@ -11,9 +12,6 @@ async function fetchClient({ method = "GET", url, body = "", token }: fetchClien
     try {
         const session = await getSession();
         const accessToken = token || session?.accessToken;
-
-
-
 
         const response = await fetch(url.toString(), {
             method: method,
@@ -36,7 +34,7 @@ async function fetchClient({ method = "GET", url, body = "", token }: fetchClien
     } catch (error) {
         if (error instanceof Response) {
             if (error.status === 401) {
-                signOut();
+                await signOut();
             }
 
             throw error;
